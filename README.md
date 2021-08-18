@@ -10,3 +10,4 @@ C/C++练手
 | Set_ChangeNTLM  | 调用samlib.dll的导出函数修改用户密码 |
 | RPCDumpLsass  | Raw RPC调用AddSecurityPackage，Dll放入资源节运行时释放 |
 | TokenTest  | 学习AccessToken的Demo |
+| AddUserBypass_SAMR  | 利用MS-SAMR添加账户 |
