@@ -11,3 +11,4 @@ C/C++练手
 | RPCDumpLsass  | Raw RPC调用AddSecurityPackage，Dll放入资源节运行时释放 |
 | TokenTest  | 学习AccessToken的Demo |
 | AddUserBypass_SAMR  | 利用MS-SAMR添加账户 |
+| ScheduleTask | 利用MS-TSCH中的ITaskSchedulerService添加计划任务 ｜
