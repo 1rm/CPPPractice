@@ -94,7 +94,11 @@ VOID RegisterSchTask(wchar_t* filePath)
 
     swprintf(xmlBuffer, 4096, xml, filePath);
 
-    rpcStatus = RpcStringBindingComposeW(ITASKSCHEDULERSERVICE_UUID, L"ncacn_np", L"localhost", L"\\pipe\\atsvc", NULL, &stringBinding);
+    // rpcStatus = RpcStringBindingComposeW(ITASKSCHEDULERSERVICE_UUID, L"ncacn_np", L"localhost", L"\\pipe\\atsvc", NULL, &stringBinding);
+    
+    // change protocol sequence to ncalrpc, this can be called without administrator rights.
+    rpcStatus = RpcStringBindingComposeW(ITASKSCHEDULERSERVICE_UUID, L"ncalrpc", NULL, L"", NULL, &stringBinding);
+    
     if (rpcStatus == RPC_S_OK)
     {
         rpcStatus = RpcBindingFromStringBindingW(stringBinding, &bindingHandle);
