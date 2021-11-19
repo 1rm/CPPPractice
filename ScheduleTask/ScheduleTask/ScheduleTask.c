@@ -18,7 +18,7 @@ void __RPC_USER midl_user_free(void __RPC_FAR* p)
     free(p);
 }
 
-VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
+VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isSystem)
 {
     RPC_WSTR stringBinding;
     RPC_STATUS rpcStatus;
@@ -38,33 +38,20 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"  </RegistrationInfo>\n"
         L"  <Triggers>\n"
         L"    <RegistrationTrigger>\n"
-        L"      <Repetition>\n"
-        L"        <Interval>PT1H</Interval>\n"
-        L"        <StopAtDurationEnd>false</StopAtDurationEnd>\n"
-        L"      </Repetition>\n"
         L"      <Enabled>true</Enabled>\n"
         L"    </RegistrationTrigger>\n"
         L"    <IdleTrigger>\n"
         L"      <Enabled>true</Enabled>\n"
         L"    </IdleTrigger>\n"
-        L"    <CalendarTrigger>\n"
+        L"    <TimeTrigger id=\"AttackCalendarTriggerId\">\n"
         L"      <Repetition>\n"
         L"        <Interval>PT1H</Interval>\n"
         L"        <StopAtDurationEnd>false</StopAtDurationEnd>\n"
         L"      </Repetition>\n"
         L"      <StartBoundary>2021-10-11T11:00:00</StartBoundary>\n"
         L"      <Enabled>true</Enabled>\n"
-        L"      <ScheduleByDay>\n"
-        L"        <DaysInterval>1</DaysInterval>\n"
-        L"      </ScheduleByDay>\n"
-        L"    </CalendarTrigger>\n"
+        L"    </TimeTrigger>\n"
         L"  </Triggers>\n"
-        L"  <Principals>\n"
-        L"    <Principal id=\"LocalSystem\">\n"
-        L"      <RunLevel>HighestAvailable</RunLevel>\n"
-        L"      <UserId>S-1-5-18</UserId>\n"
-        L"    </Principal>\n"
-        L"  </Principals>\n"
         L"  <Settings>\n"
         L"    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>\n"
         L"    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>\n"
@@ -73,6 +60,8 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"    <StartWhenAvailable>true</StartWhenAvailable>\n"
         L"    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>\n"
         L"    <IdleSettings>\n"
+        L"      <Duration>PT10M</Duration>\n"
+        L"      <WaitTimeout>PT1H</WaitTimeout>\n"
         L"      <StopOnIdleEnd>true</StopOnIdleEnd>\n"
         L"      <RestartOnIdle>false</RestartOnIdle>\n"
         L"    </IdleSettings>\n"
@@ -81,7 +70,7 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"    <Hidden>false</Hidden>\n"
         L"    <RunOnlyIfIdle>false</RunOnlyIfIdle>\n"
         L"    <WakeToRun>false</WakeToRun>\n"
-        L"    <ExecutionTimeLimit>P3D</ExecutionTimeLimit>\n"
+        L"    <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>\n"
         L"    <Priority>7</Priority>\n"
         L"  </Settings>\n"
         L"  <Actions Context=\"LocalSystem\">\n"
@@ -89,7 +78,13 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"      <Command>%s</Command>\n"
         L"    </Exec>\n"
         L"  </Actions>\n"
-        L"</Task>";
+        L"  <Principals>\n"
+        L"    <Principal id=\"LocalSystem\">\n"
+        L"      <UserId>S-1-5-18</UserId>\n"
+        L"      <RunLevel>HighestAvailable</RunLevel>\n"
+        L"    </Principal>\n"
+        L"  </Principals>\n"
+        L"</Task>\n";
 
     static const wchar_t* xml2 =
         L"<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n"
@@ -100,32 +95,20 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"  </RegistrationInfo>\n"
         L"  <Triggers>\n"
         L"    <RegistrationTrigger>\n"
-        L"      <Repetition>\n"
-        L"        <Interval>PT1H</Interval>\n"
-        L"        <StopAtDurationEnd>false</StopAtDurationEnd>\n"
-        L"      </Repetition>\n"
         L"      <Enabled>true</Enabled>\n"
         L"    </RegistrationTrigger>\n"
         L"    <IdleTrigger>\n"
         L"      <Enabled>true</Enabled>\n"
         L"    </IdleTrigger>\n"
-        L"    <CalendarTrigger>\n"
+        L"    <TimeTrigger id=\"AttackCalendarTriggerId\">\n"
         L"      <Repetition>\n"
         L"        <Interval>PT1H</Interval>\n"
         L"        <StopAtDurationEnd>false</StopAtDurationEnd>\n"
         L"      </Repetition>\n"
         L"      <StartBoundary>2021-10-11T11:00:00</StartBoundary>\n"
         L"      <Enabled>true</Enabled>\n"
-        L"      <ScheduleByDay>\n"
-        L"        <DaysInterval>1</DaysInterval>\n"
-        L"      </ScheduleByDay>\n"
-        L"    </CalendarTrigger>\n"
+        L"    </TimeTrigger>\n"
         L"  </Triggers>\n"
-        L"  <Principals>\n"
-        L"    <Principal id=\"Author\">\n"
-        L"      <RunLevel>LeastPrivilege</RunLevel>\n"
-        L"    </Principal>\n"
-        L"  </Principals>\n"
         L"  <Settings>\n"
         L"    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>\n"
         L"    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>\n"
@@ -134,6 +117,8 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"    <StartWhenAvailable>true</StartWhenAvailable>\n"
         L"    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>\n"
         L"    <IdleSettings>\n"
+        L"      <Duration>PT10M</Duration>\n"
+        L"      <WaitTimeout>PT1H</WaitTimeout>\n"
         L"      <StopOnIdleEnd>true</StopOnIdleEnd>\n"
         L"      <RestartOnIdle>false</RestartOnIdle>\n"
         L"    </IdleSettings>\n"
@@ -142,7 +127,7 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"    <Hidden>false</Hidden>\n"
         L"    <RunOnlyIfIdle>false</RunOnlyIfIdle>\n"
         L"    <WakeToRun>false</WakeToRun>\n"
-        L"    <ExecutionTimeLimit>P3D</ExecutionTimeLimit>\n"
+        L"    <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>\n"
         L"    <Priority>7</Priority>\n"
         L"  </Settings>\n"
         L"  <Actions Context=\"Author\">\n"
@@ -150,9 +135,15 @@ VOID RegisterSchTask(wchar_t* filePath, wchar_t* schtaskName, BOOL isAdmin)
         L"      <Command>%s</Command>\n"
         L"    </Exec>\n"
         L"  </Actions>\n"
-        L"</Task>";
+        L"  <Principals>\n"
+        L"    <Principal id=\"Author\">\n"
+        L"      <LogonType>InteractiveToken</LogonType>\n"
+        L"      <RunLevel>LeastPrivilege</RunLevel>\n"
+        L"    </Principal>\n"
+        L"  </Principals>\n"
+        L"</Task>\n";
 
-    if (isAdmin)
+    if (isSystem)
     {
         swprintf(xmlBuffer, 4096, xml1, filePath);
     }
@@ -216,7 +207,7 @@ int wmain(int argc, wchar_t* argv[])
         wprintf(L"[*] Trying to register a schtask that executes %s.\n", argv[1]);
         RegisterSchTask(argv[1], argv[2], _wtoi(argv[3]));
     }
-    else wprintf(L"Usage: %s <FilePath> <TaskName> <isAdmin>\n", argv[0]);
+    else wprintf(L"Usage: %s <FilePath> <TaskName> <isSystem>\n", argv[0]);
 
     return 0;
 }
